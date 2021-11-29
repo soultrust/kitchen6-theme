@@ -1,0 +1,17 @@
+.wp-admin .recipe-source .wp-editor-area {
+  height: 5rem !important;
+}
+
+.wp-admin .recipe-source .ed_button[value='img'],
+.wp-admin .recipe-source .ed_button[value='b-quote'],
+.wp-admin .recipe-source .ed_button[value='del'],
+.wp-admin .recipe-source .ed_button[value='ins'],
+.wp-admin .recipe-source .ed_button[value='img'],
+.wp-admin .recipe-source .ed_button[value='ul'],
+.wp-admin .recipe-source .ed_button[value='ol'],
+.wp-admin .recipe-source .ed_button[value='li'],
+.wp-admin .recipe-source .ed_button[value='code'],
+.wp-admin .recipe-source .ed_button[value='more'],
+.wp-admin .recipe-source .ed_button[value='close tags'] {
+  display: none;
+}

@@ -8,4 +8,18 @@
   <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
-<h1><a href="<?php echo site_url(); ?>">Kitchen6</a></h1>
+  <header class="site-header">
+    <h1 class="site-title">
+      <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
+    </h1>
+    <div class="search-input">
+      <input type="text" class="search-field" id="search-field" placeholder="Search Recipes and Tags" autocomplete="off" />
+    </div>
+    <div class="search js-search-trigger">
+      <div class="search-text">
+        <span>Search</span>
+        <span>Recipes</span>
+      </div>
+      <div class="dashicons dashicons-search search-icon"></div>
+    </div>
+  </header>

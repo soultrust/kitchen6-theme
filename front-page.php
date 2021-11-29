@@ -2,7 +2,7 @@
   get_header();
 ?>
 
-<main id="primary" class="site-main">
+<main class="site-main">
   <h2>RECENTLY ADDED RECIPES</h2>
   <ul class="links-list">
   <?php
@@ -19,5 +19,5 @@
 </main>
 
 <?php
-get_sidebar();
-get_footer();
+  get_sidebar();
+  get_footer();
