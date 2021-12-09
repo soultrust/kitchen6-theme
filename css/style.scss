@@ -1,0 +1,49 @@
+html {
+  height: 100vh;
+}
+
+body {
+  background: #9e0000;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  margin: 0;
+  height: 100%;
+}
+
+.site-header {
+  background-color: #f7f7f6;
+  grid-column: 1/-1;
+  border-radius: 9px;
+  margin: 6px 6px 3px 6px;
+  padding: 1rem;
+}
+
+.site-title {
+  width: 240px;
+}
+
+.site-main {
+  background-color: #d7d7d1;
+  grid-column: 1/-2;
+  margin: 3px 3px 6px 6px;
+  border-radius: 9px;
+  padding: 1rem;
+}
+
+#sidebar {
+  background-color: #e7e7e3;
+  border-radius: 9px;
+  padding: 1rem;
+  margin: 3px 6px 6px 3px;
+}
+
+.search {
+  position: absolute;
+  right: 0.7rem;
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+}
