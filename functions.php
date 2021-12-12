@@ -1,18 +1,21 @@
 <?php
 
+require get_theme_file_path('/includes/search-route.php');
+
 function k6_files() {
   wp_enqueue_script('main-js', get_theme_file_uri('/build/index.js'));
   wp_enqueue_style('google-fonts', '//fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
   wp_enqueue_style('font-awesome', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
   wp_enqueue_style('k6_main_styles', get_theme_file_uri('/style.css'));
   wp_enqueue_style('k6_extra_styles', get_theme_file_uri('/build/style-index.css'));
+  wp_enqueue_style('dashicons');
 
   // To change root url on production / local
-  // wp_localize_script(
-  //   'main-js', 'k6', array(
-  //     'root_url' => get_site_url()
-  //   )
-  // );
+  wp_localize_script(
+    'main-js', 'k6', array(
+      'root_url' => get_site_url()
+    )
+  );
 }
 add_action('wp_enqueue_scripts', 'k6_files');
 
@@ -79,13 +82,6 @@ add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 
 
 
-
-
-
-
-
-
-
 // add_filter( 'enter_title_here', 'custom_enter_title_text' );
 
 // function custom_enter_title_text( $input ) {
@@ -137,14 +133,6 @@ add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 // }
 
 
-// add_action('wp_enqueue_scripts', 'load_dashicons_front_end');
-
-// function load_dashicons_front_end()
-// {
-//     wp_enqueue_style('dashicons');
-// }
-
-
 // Redirect subscriber-level members to home page.
 // (demo account is a subcriber)
 // function redirectToFrontEnd() {
@@ -190,72 +178,6 @@ add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 //   return get_bloginfo('name');
 // }
 
-// add_action('rest_api_init', 'k6RegisterSearch');
 
-// function k6RegisterSearch() {
-//   register_rest_route('k6/v1', 'search', array(
-//     'methods' => WP_REST_SERVER::READABLE,
-//     'callback' => 'k6SearchResults'
-//   ));
-// }
-
-// function k6SearchResults($data) {
-//   $recipes = new WP_Query(array(
-//     'post_type' => 'recipe',
-//     's' => sanitize_text_field($data['term'])
-//   ));
-//   wp_reset_postdata();
-
-//   $results = array(
-//     'recipes' => array(),
-//     'tags' => array(),
-//     'taggedRecipes' => array(),
-//     'term' => ''
-//   );
-
-  // while($recipes->have_posts()) {
-  //   $recipes->the_post();
-
-  //   if (get_post_type() === 'recipe') {
-  //     array_push($results['recipes'], array(
-  //       'title' => get_the_title(),
-  //       'permalink' => get_the_permalink()
-  //     ));
-  //   }
-  // }
-
-  // $tags = get_tags(array(
-  //   'search' => sanitize_text_field($data['term'])
-  // ));
-
-  // GET tags (tag archive pages) that have search term in the tag name
-  // foreach ($tags as &$tag) {
-  //   array_push($results['tags'], array(
-  //     'post_type' => 'tag',
-  //     'name' => $tag->name,
-  //     'permalink' => get_tag_link($tag->term_id)
-  //   ));
-  // }
-
-  // $taggedRecipes = new WP_Query(array(
-  //   'post_type' => 'recipe',
-  //   'tag' => sanitize_text_field($data['term'])
-  // ));
-
-  // GET recipes that have a tag with a title that matches the search term
-  // while($taggedRecipes->have_posts()) {
-  //   $taggedRecipes->the_post();
-  //   array_push($results['taggedRecipes'], array(
-  //     'post_type' => 'taggedRecipe',
-  //     'title' => get_the_title(),
-  //     'permalink' => get_the_permalink()
-  //   ));
-  // }
-
-  // return searched term for use on front-end
-  // $results['term'] = sanitize_text_field($data['term']);
-
-  // return $results;
-// }
 
 

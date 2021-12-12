@@ -12,11 +12,11 @@
     <h1 class="site-title">
       <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
     </h1>
-    <div class="search-input">
-      <input type="text" class="search-field" id="search-field" placeholder="Search Recipes and Tags" autocomplete="off" />
+    <div class="search-field" id="search-field">
+      <input type="text" class="search-input" id="search-input" placeholder="Search Recipes and Tags" autocomplete="off" />
     </div>
-    <div class="search" id="js-search-trigger">
-      <div class="search-text">
+    <div class="search" id="search-trigger">
+      <div id="search-trigger-text">
         <span>Search</span>
         <span>Recipes</span>
       </div>
