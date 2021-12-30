@@ -3,7 +3,7 @@
 ?>
 
 <main class="site-main">
-  <h2>RECENTLY ADDED RECIPES</h2>
+  <h3>RECENTLY ADDED RECIPES</h3>
   <ul class="links-list">
   <?php
   $recipes = new WP_Query(array(

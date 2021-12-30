@@ -16,7 +16,7 @@
       <input type="text" class="search-input" id="search-input" placeholder="Search Recipes and Tags" autocomplete="off" />
     </div>
     <div class="search" id="search-trigger">
-      <div id="search-trigger-text">
+      <div class="search__trigger-txt">
         <span>Search</span>
         <span>Recipes</span>
       </div>

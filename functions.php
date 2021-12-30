@@ -21,7 +21,7 @@ add_action('wp_enqueue_scripts', 'k6_files');
 
 function k6_post_types() {
   register_post_type('recipe', array(
-    'supports' => array('thumbnail'),
+    'supports' => array('thumbnail', 'widget'),
     'show_in_rest' => true,
     'rewrite' => array('slug' => 'recipes'),
     'has_archive' => true,
@@ -51,12 +51,11 @@ function post_remove () {
 } 
 add_action('admin_menu', 'post_remove');
 
-// Make admin use main style from front end
-function ourLoginCSS() {
-  wp_enqueue_style( 'main-style', get_stylesheet_directory_uri() . '/style.css' );
+function login_styles() {
+  wp_enqueue_style( 'custom-styles', get_theme_file_uri('/build/style-index.css'));
   wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet');
 }
-add_action('login_enqueue_scripts', 'ourLoginCSS');
+add_action( 'login_enqueue_scripts', 'login_styles' );
 
 // The following is necessary for enabling usage of js modules
 function add_type_attribute($tag, $handle, $src) {
@@ -70,9 +69,27 @@ function add_type_attribute($tag, $handle, $src) {
 }
 add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 
+// Enable "Widgets" admin section
+function k6_widgets_init() {
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Sidebar', 'twentytwentyone' ),
+			'id'            => 'sidebar-1',
+			'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'twentytwentyone' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+}
+add_action( 'widgets_init', 'k6_widgets_init' );
 
-
-
+// Enable tags for recipes
+function gp_register_taxonomy_for_object_type() {
+    register_taxonomy_for_object_type( 'post_tag', 'recipe' );
+};
+add_action( 'init', 'gp_register_taxonomy_for_object_type' );
 
 
 
