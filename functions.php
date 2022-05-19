@@ -21,7 +21,7 @@ add_action('wp_enqueue_scripts', 'k6_files');
 
 function k6_post_types() {
   register_post_type('recipe', array(
-    'supports' => array('thumbnail', 'widget'),
+    'supports' => array('title', 'thumbnail', 'widget'),
     'show_in_rest' => true,
     'rewrite' => array('slug' => 'recipes'),
     'has_archive' => true,
@@ -35,6 +35,22 @@ function k6_post_types() {
       'singular_name' => 'Recipe'
     ),
     'menu_icon' => 'dashicons-food'
+  ));
+  register_post_type('ingredient', array(
+    'supports' => array('title', 'thumbnail'),
+    'show_in_rest' => true,
+    'rewrite' => array('slug' => 'ingredients'),
+    'has_archive' => true,
+    'menu_position' => 3,
+    'public' => true,
+    'labels' => array(
+      'name' => 'Ingredient Profiles',
+      'all_items' => 'All Ingredient Profiles',
+      'add_new_item' => 'Add New Ingredient Profile',
+      'edit_item' => 'Edit Ingredient Profile',
+      'singular_name' => 'Ingredient Profile'
+    ),
+    'menu_icon' => 'dashicons-media-document'
   ));
 }
 add_action('init', 'k6_post_types');
