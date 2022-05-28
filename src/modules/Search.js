@@ -1,41 +1,41 @@
 class Search {
-  // 1. describe and create/initiate our object
   constructor() {
     this.addSearchHTML();
-    this.resultsDiv = document.querySelector('#search-overlay__results');
+    this.resultsDiv = document.getElementById('search-overlay-results');
     this.openButton = document.getElementById('search-trigger');
-    this.closeButton = document.querySelector('.search-overlay__close');
-    this.searchOverlay = document.querySelector('.search-overlay');
+    this.closeButton = document.getElementById('search-overlay-close');
+    this.searchOverlay = document.getElementById('search-overlay');
     this.searchTriggerText = document.getElementById('search-trigger-text');
-    this.searchInput = document.querySelector('.search-input');
-    this.searchField = document.querySelector('#search-field');
+    this.searchInput = document.getElementById('search-input');
     this.body = document.querySelector('body');
-    this.isOverlayOpen = false;
+    this.isSearchFieldOpen = false;
     this.isSpinnerVisible = false;
-    this.previousValue;
-    this.typingTimer;
     this.events();
   }
 
-  // 2. events
   events() {
-    this.openButton.addEventListener('click', this.openOverlay.bind(this));
+    this.openButton.addEventListener('click', this.showSearchField.bind(this));
     this.closeButton.addEventListener('click', this.closeOverlay.bind(this));
     document.addEventListener('keydown', this.keypressDispatcher.bind(this));
-    this.searchField.addEventListener('keyup', this.typingLogic.bind(this));
+    this.searchInput.addEventListener('keyup', this.typingLogic.bind(this));
+    this.searchInput.addEventListener('blur', function() {
+      if (!this.body.classList.contains('search-results-active')) {
+        this.closeOverlay();
+      }
+    }.bind(this));
   }
 
   typingLogic() {
     if (this.searchInput.value !== this.previousValue) {
       clearTimeout(this.typingTimer);
       if (this.searchInput.value) {
+        this.openOverlay();
         if (!this.isSpinnerVisible) {
           this.resultsDiv.innerHTML = '<div class="spinner-loader"><div class="anim"></div></div>';
           this.isSpinnerVisible = true;
         }
         this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       } else {
-        this.resultsDiv.innerHTML = '';
         this.isSpinnerVisible = false;
       }
     }
@@ -91,44 +91,45 @@ class Search {
   }
 
   keypressDispatcher(e) {
-    if (e.keyCode === 83 && !this.isOverlayOpen) {
-      this.openOverlay();
+    if (e.keyCode === 83 && !this.isSearchFieldOpen) {
+      this.showSearchField();
     }
-    if (e.keyCode === 27 && this.isOverlayOpen) {
+    if (e.keyCode === 27 && this.isSearchFieldOpen) {
       this.closeOverlay();
     }
   }
 
-  // 3. methods 
-  openOverlay() {
-    this.searchOverlay.classList.add('search-overlay--active');
-    this.searchTriggerText.classList.add('search-trigger-text--hide');
-    this.searchField.classList.add('search-field--show');
-    this.body.classList.add('body-no-scroll');
+  showSearchField() {
+    this.body.classList.add('search-field-active');
     this.searchInput.value = '';
+    // this.searchInput.focus()
     setTimeout(() => this.searchInput.focus(), 301);
-    this.isOverlayOpen = true;
+    this.openButton.removeEventListener('click', this.showSearchField.bind(this));
+    this.isSearchFieldOpen = true;
+  }
+
+  openOverlay() {
+    this.body.classList.add('search-results-active');
   }
 
   closeOverlay() {
-    this.searchOverlay.classList.remove('search-overlay--active');
-    this.searchTriggerText.classList.remove('search-trigger-text--hide');
-    this.searchField.classList.remove('search-field--show');
-    this.body.classList.remove('body-no-scroll');
+    this.body.classList.remove('search-results-active');
+    this.body.classList.remove('search-field-active');
     this.searchInput.value = '';
-    this.resultsDiv.innerHTML = '';
     this.searchInput.blur();
-    this.isOverlayOpen = false;
+    this.isSearchFieldOpen = false;
+    this.previousValue = '';
   }
 
   addSearchHTML() {
     let overlay = document.createElement('div');
     overlay.classList.add('search-overlay');
+    overlay.setAttribute('id', 'search-overlay');
     overlay.innerHTML = `
-      <div class="search-overlay__close dashicons dashicons-no">
+      <div id="search-overlay-close" class="search-overlay-close dashicons dashicons-no">
       </div>
       <div class="container">
-        <div id="search-overlay__results"></div>
+        <div id="search-overlay-results"></div>
       </div>`
     document.querySelector('body').append(overlay);
   }
