@@ -3,7 +3,7 @@
 ?>
 
 <main class="site-main">
-  <div>
+  <div class="recently-added recently-added-recipes">
     <h3>RECENTLY ADDED RECIPES</h3>
     <ul class="links-list">
     <?php
@@ -19,7 +19,7 @@
     </ul>
   </div>
 
-  <div>
+  <div class="recently-added recently-added-ingredients">
     <h3>RECENTLY ADDED INGREDIENT PROFILES</h3>
     <ul class="links-list">
     <?php

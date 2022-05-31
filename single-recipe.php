@@ -129,13 +129,13 @@ if (has_post_thumbnail()) { ?>
 
 
 
-				<div class="rich-text-panel ingredients">
-      <h5 class="panel-title">Ingredients</h5>
+		<div class="rich-text-panel ingredients">
+      <h3 class="panel-title">Ingredients</h3>
       <?php the_field('ingredients'); ?>
     </div>
 
     <div class="rich-text-panel directions">
-      <h5 class="panel-title">Directions</h5>
+      <h3 class="panel-title">Directions</h3>
       <?php the_field('directions'); ?>
     </div>
 

@@ -4,13 +4,14 @@ require get_theme_file_path('/includes/search-route.php');
 
 function k6_files() {
   wp_enqueue_script('main-js', get_theme_file_uri('/build/index.js'));
-  wp_enqueue_style('google-fonts', '//fonts.googleapis.com/css2?family=Lato&display=swap');
+  wp_enqueue_style('google-fonts', '//fonts.googleapis.com/css2?family=Lato:wght@100;300;400;500;600;700;900&display=swap');
   wp_enqueue_style('font-awesome', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
   wp_enqueue_style('k6_main_styles', get_theme_file_uri('/style.css'));
   wp_enqueue_style('k6_extra_styles', get_theme_file_uri('/build/style-index.css'));
   wp_enqueue_style('dashicons');
 
-  // To change root url on production / local
+  // For dynamically setting k6.root_url prop to point to root
+  // whether on prod or local. (example usage in Search.js)
   wp_localize_script(
     'main-js', 'k6', array(
       'root_url' => get_site_url()
@@ -108,21 +109,16 @@ function gp_register_taxonomy_for_object_type() {
 add_action( 'init', 'gp_register_taxonomy_for_object_type' );
 
 
+function custom_enter_title_text( $input ) {
+  if ( 'recipe' === get_post_type() ) {
+      return __( 'Add recipe title', 'wp-rig' );
+  }
+  return $input;
+}
+
+add_filter( 'enter_title_here', 'custom_enter_title_text' );
 
 
-
-
-
-
-
-// add_filter( 'enter_title_here', 'custom_enter_title_text' );
-
-// function custom_enter_title_text( $input ) {
-//   if ( 'recipe' === get_post_type() ) {
-//       return __( 'Add recipe title', 'wp-rig' );
-//   }
-//   return $input;
-// }
 
 
 // function change_columns( $cols ) {

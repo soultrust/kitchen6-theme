@@ -102,8 +102,9 @@ class Search {
   showSearchField() {
     this.body.classList.add('search-field-active');
     this.searchInput.value = '';
-    // this.searchInput.focus()
-    setTimeout(() => this.searchInput.focus(), 301);
+    // setTimeout to wait for overlay fade-in anim to play out.
+    // Otherwise, focus doesn't work.
+    setTimeout(() => this.searchInput.focus(), 301); 
     this.openButton.removeEventListener('click', this.showSearchField.bind(this));
     this.isSearchFieldOpen = true;
   }
@@ -128,7 +129,7 @@ class Search {
     overlay.innerHTML = `
       <div id="search-overlay-close" class="search-overlay-close dashicons dashicons-no">
       </div>
-      <div class="container">
+      <div class="search-overlay-container">
         <div id="search-overlay-results"></div>
       </div>`
     document.querySelector('body').append(overlay);
