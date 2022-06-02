@@ -79,8 +79,18 @@ class Search {
               </ul>
             </div>`
           : ''}
+          ${results.ingredients.length ?
+            `<div class="column">
+              <h3>Ingredient Profiles</h3>
+              <ul class="link-list min-list">
+                ${results.ingredients.map(
+                item => `<li><a href="${item.permalink}">${item.title}</a></li>`
+              ).join('')}
+              </ul>
+            </div>`
+          : ''}
         </div>
-        ${!results.recipes.length && !results.tags.length && !results.taggedRecipes.length ?
+        ${!results.recipes.length && !results.tags.length && !results.taggedRecipes.length && !results.ingredients ?
             '<p>No matching results.</p>' : ''}
         `;
         this.isSpinnerVisible = false;

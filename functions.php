@@ -38,7 +38,7 @@ function k6_post_types() {
     'menu_icon' => 'dashicons-food'
   ));
   register_post_type('ingredient', array(
-    'supports' => array('title', 'thumbnail'),
+    'supports' => array('title', 'editor', 'thumbnail'),
     'show_in_rest' => true,
     'rewrite' => array('slug' => 'ingredients'),
     'has_archive' => true,
@@ -95,7 +95,7 @@ function k6_widgets_init() {
 			'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'twentytwentyone' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
+			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h2>',
 		)
 	);

@@ -19,6 +19,7 @@ function k6_search_results($data) {
     'recipes' => array(),
     'tags' => array(),
     'taggedRecipes' => array(),
+    'ingredients' => array(),
     'term' => ''
   );
 
@@ -56,6 +57,21 @@ function k6_search_results($data) {
     $taggedRecipes->the_post();
     array_push($results['taggedRecipes'], array(
       'post_type' => 'taggedRecipe',
+      'title' => get_the_title(),
+      'permalink' => get_the_permalink()
+    ));
+  }
+
+  $ingredients = new WP_Query(array(
+    'post_type' => 'ingredient',
+    's' => sanitize_text_field($data['term'])
+  ));
+
+  // GET ingredient profiles that contain the search term
+  while($ingredients->have_posts()) {
+    $ingredients->the_post();
+    array_push($results['ingredients'], array(
+      'post_type' => 'ingredient',
       'title' => get_the_title(),
       'permalink' => get_the_permalink()
     ));

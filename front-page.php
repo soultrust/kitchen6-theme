@@ -4,7 +4,7 @@
 
 <main class="site-main">
   <div class="recently-added recently-added-recipes">
-    <h3>RECENTLY ADDED RECIPES</h3>
+    <h3>RECIPES</h3>
     <ul class="links-list">
     <?php
     $recipes = new WP_Query(array(
@@ -20,7 +20,7 @@
   </div>
 
   <div class="recently-added recently-added-ingredients">
-    <h3>RECENTLY ADDED INGREDIENT PROFILES</h3>
+    <h3>INGREDIENT PROFILES</h3>
     <ul class="links-list">
     <?php
     $recipes = new WP_Query(array(
