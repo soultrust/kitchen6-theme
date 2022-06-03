@@ -141,7 +141,7 @@ if (has_post_thumbnail()) { ?>
 
     <?php if (get_field('notes')) { ?>
       <div class="rich-text-panel notes">
-        <h5 class="panel-title">Notes</h5>
+        <h3 class="panel-title">Notes</h3>
         <?php the_field('notes'); ?>
       </div>
     <?php } ?>
