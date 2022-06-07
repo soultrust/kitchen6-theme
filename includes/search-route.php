@@ -1,14 +1,14 @@
 <?php
 
-function k6_register_search() {
+function register_search() {
   register_rest_route('k6/v1', 'search', array(
     'methods' => WP_REST_SERVER::READABLE,
-    'callback' => 'k6_search_results'
+    'callback' => 'search_results'
   ));
 }
-add_action('rest_api_init', 'k6_register_search');
+add_action('rest_api_init', 'register_search');
 
-function k6_search_results($data) {
+function search_results($data) {
   $recipes = new WP_Query(array(
     'post_type' => 'recipe',
     's' => sanitize_text_field($data['term'])
