@@ -1,7 +1,7 @@
 .search {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .search-trigger {
@@ -15,25 +15,31 @@
 
   &-txt {
     margin-right: .3rem;
+
+    span {
+      white-space: nowrap;
+    }
   }
 }
 
-.search-field {
-  opacity: 0;
-  z-index: 1;
-  flex-grow: 1;
-}
-
 .search-input {
+  position: relative;
   width: 100%;
-  height: 2rem;
+  height: 3.7rem;
   background-color: #f7f7f6;
-  font-size: 1.2rem;
+  font-size: 2rem;
   z-index: 1;
   margin: 0;
   flex-grow: 1;
   color: #9e0000;
   padding-left: .4rem;
+  right: -100%;
+  transition: right .3s ease-out;
+  // animation-duration: .5s;
+  // animation-name: searchInputSlideIn;
+  // animation-iteration-count: 0;
+  // animation-direction: alternate;
+  // animation-timing-function: ease-out;
   border: {
     width: 0 0 2px 0;
     radius: 0;
@@ -58,10 +64,10 @@
   overflow-x: hidden;
   z-index: 110;
   position: absolute;
-  top: 64px;
+  top: 59px;
   left: 6px;
   right: 6px;
-  bottom: 6px;
+  bottom: 0;
   background-color: #d7d7d2;
   visibility: hidden;
   opacity: 0;
@@ -71,7 +77,13 @@
   border-radius: 7px;
 
   h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    font-weight: 400;
   }
 
   .column {
@@ -80,16 +92,26 @@
 
   &-close {
     position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    font-size: 2.1rem;
+    top: .8rem;
+    right: 3rem;
+    font-size: 5rem;
     cursor: pointer;
     transition: all .3s;
     line-height: .7;
   }
   &-container {
-    padding: 1rem 1rem;
+    padding: 2rem;
   }
+}
+
+.search-field {
+  opacity: 0;
+  z-index: 1;
+  flex-grow: 1;
+  height: 100%;
+  max-width: 40rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .search-field-active {
@@ -97,10 +119,36 @@
 
   .search-field {
     opacity: 1;
-    background-color: white;
   }
   .search-trigger-txt {
     display: none;
+  }
+  .search-input {
+    right: 0;
+    // animation: .5s 0 alternate searchInputSlideOut;
+    // animation-duration: .5s;
+    // animation-name: searchInputSlideOut;
+    // animation-iteration-count: 0;
+    // animation-direction: alternate;
+    // animation-timing-function: ease-out;
+  }
+}
+
+@keyframes searchInputSlideOut {
+  0% {
+    right: 100%;
+  }
+  100% {
+    right: 0%;
+  }
+}
+
+@keyframes searchInputSlideIn {
+  0% {
+    right: 0%;
+  }
+  100% {
+    right: 100%;
   }
 }
 
@@ -140,4 +188,11 @@
   border-radius: 50%;
   -webkit-animation: spin 1s infinite linear;
           animation: spin 1s infinite linear;
+}
+
+.dashicons.search-icon {
+  font-size: 2rem; 
+  line-height: 1.3rem;
+  top: 3px;
+  position: relative;
 }

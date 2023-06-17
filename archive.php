@@ -20,12 +20,16 @@ if (is_tag()) {
 if (is_category()) {
 	$recipes = new WP_Query($category_args);
 }
-
+?>
+<ul class="links-list">
+	<?php
 while ($recipes->have_posts()) {
 	$recipes->the_post(); ?>
 	<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
 <?php 
-} wp_reset_postdata(); ?>
+} ?></ul>
 </main>
 <?php
+	wp_reset_postdata();
+	get_sidebar();
 	get_footer();

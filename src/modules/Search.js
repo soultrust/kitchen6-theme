@@ -52,7 +52,7 @@ class Search {
           ${results.recipes.length ?
             `<div class="column">
               <h3>Recipes</h3>
-              <ul class="link-list min-list">
+              <ul class="links-list min-list">
               ${results.recipes.map(
                 item => `<li><a href="${item.permalink}">${item.title}</a></li>`
               ).join('')}
@@ -62,7 +62,7 @@ class Search {
           ${results.tags.length ?
             `<div class="column">
               <h3>Tags</h3>
-              <ul class="link-list min-list">
+              <ul class="links-list min-list">
                 ${results.tags.map(
                 item => `<li><a href="${item.permalink}">${item.name}</a></li>`
               ).join('')}
@@ -72,7 +72,7 @@ class Search {
           ${results.taggedRecipes.length ?
             `<div class="column">
               <h3>Recipes with Tag: ${results.term}</h3>
-              <ul class="link-list min-list">
+              <ul class="links-list min-list">
                 ${results.taggedRecipes.map(
                 item => `<li><a href="${item.permalink}">${item.title}</a></li>`
               ).join('')}
@@ -82,7 +82,7 @@ class Search {
           ${results.ingredients.length ?
             `<div class="column">
               <h3>Ingredient Profiles</h3>
-              <ul class="link-list min-list">
+              <ul class="links-list min-list">
                 ${results.ingredients.map(
                 item => `<li><a href="${item.permalink}">${item.title}</a></li>`
               ).join('')}
@@ -137,7 +137,7 @@ class Search {
     overlay.classList.add('search-overlay');
     overlay.setAttribute('id', 'search-overlay');
     overlay.innerHTML = `
-      <div id="search-overlay-close" class="search-overlay-close dashicons dashicons-no">
+      <div id="search-overlay-close" class="search-overlay-close dashicons dashicons-no-alt">
       </div>
       <div class="search-overlay-container">
         <div id="search-overlay-results"></div>

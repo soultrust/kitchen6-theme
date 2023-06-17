@@ -28,8 +28,7 @@
       </div>
       <div class="search-trigger" id="search-trigger">
         <div class="search-trigger-txt" id="search-trigger-text">
-          <span>Search</span>
-          <span>Recipes</span>
+          <span>Search Recipes</span>
         </div>
         <div class="dashicons dashicons-search search-icon"></div>
       </div>

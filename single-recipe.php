@@ -109,8 +109,8 @@ if (has_post_thumbnail()) { ?>
           <span class="time-field">Total: </span><?php the_field('total_time');
         }
 
-        if (get_field('servings')) { ?><br />
-          <span class="servings">Servings: </span><?php the_field('servings');
+        if (get_field('servings')) { ?>
+          <div class="servings">Servings: <?php the_field('servings'); ?></div><?php
         } ?>
 
         </div>
