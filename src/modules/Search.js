@@ -142,7 +142,7 @@ class Search {
       <div class="search-overlay-container">
         <div id="search-overlay-results"></div>
       </div>`
-    document.querySelector('body').append(overlay);
+    document.querySelector('.layout').append(overlay);
   }
 }
 

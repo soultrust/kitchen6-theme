@@ -71,10 +71,10 @@
   background-color: #d7d7d2;
   visibility: hidden;
   opacity: 0;
-  transform: scaleX(1.09);
+  // transform: scaleX(1.09);
   transition: opacity .3s, transform .3s, visibility .3s;
   box-sizing: content-box;
-  border-radius: 7px;
+  border-radius: 9px;
 
   h2 {
     margin-bottom: 2rem;

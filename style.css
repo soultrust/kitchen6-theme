@@ -6,11 +6,6 @@
 
 /* from old k6 site */
 
-
-html {
-  position: relative;
-}
-
 .text-block {
   grid-column: 1/-1;
   padding: 0 0.2rem;
