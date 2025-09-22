@@ -363,3 +363,4 @@ function myplugin_remove_h1_for_ingredient_cpt() {
     }
 }
 add_action('enqueue_block_editor_assets', 'myplugin_remove_h1_for_ingredient_cpt');
+
