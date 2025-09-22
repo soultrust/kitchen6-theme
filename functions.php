@@ -22,7 +22,7 @@ add_action('wp_enqueue_scripts', 'k6_files');
 
 function k6_post_types() {
   register_post_type('recipe', array(
-    'supports' => array('title', 'thumbnail', 'widget'),
+    'supports' => array('excerpt', 'title', 'thumbnail', 'widget'),
     'show_in_rest' => true,
     'rewrite' => array('slug' => 'recipes'),
     'has_archive' => true,
@@ -35,7 +35,9 @@ function k6_post_types() {
       'edit_item' => 'Edit Recipe',
       'singular_name' => 'Recipe'
     ),
-    'menu_icon' => 'dashicons-food'
+    'menu_icon' => 'dashicons-food',
+    'publicly_queryable' => true,
+    'taxonomies'  => array( 'category' )
   ));
   register_post_type('ingredient', array(
     'supports' => array('title', 'editor', 'thumbnail'),
@@ -209,4 +211,155 @@ add_filter( 'enter_title_here', 'custom_enter_title_text' );
 
 
 
+function register_taxonomy_cuisine() {
+	 $labels = array(
+		 'name'              => _x( 'Cuisines', 'taxonomy general name' ),
+		 'singular_name'     => _x( 'Cuisine', 'taxonomy singular name' ),
+		 'search_items'      => __( 'Search Cuisines' ),
+		 'all_items'         => __( 'All Cuisines' ),
+		 'parent_item'       => __( 'Parent Cuisine' ),
+		 'parent_item_colon' => __( 'Parent Cuisine:' ),
+		 'edit_item'         => __( 'Edit Cuisine' ),
+		 'update_item'       => __( 'Update Cuisine' ),
+		 'add_new_item'      => __( 'Add New Cuisine' ),
+		 'new_item_name'     => __( 'New Cuisine Name' ),
+		 'menu_name'         => __( 'Cuisine' ),
+	 );
+	 $args   = array(
+		 'hierarchical'      => true, // make it hierarchical (like categories)
+		 'labels'            => $labels,
+		 'show_ui'           => true,
+		 'show_admin_column' => true,
+		 'query_var'         => true,
+		 'rewrite'           => [ 'slug' => 'course' ],
+	 );
+	 register_taxonomy( 'cuisine', [ 'recipe' ], $args );
+}
+add_action( 'init', 'register_taxonomy_cuisine' );
 
+
+
+// function wpse301755_change_tags_labels( $args, $taxonomy ) {
+//     if ( 'post_tag' === $taxonomy ) {
+//         $args['labels'] = array(
+//             'name'          => 'Ingredients',
+//             'singular_name' => 'Ingredient',
+//             'menu_name'     => 'Ingredients',
+//             'separate_items_with_commas' => 'Separate ingredients with commas.',
+//             'choose_from_most_used' => 'Choose from the most used ingredients.'
+//         );
+//     }
+//     return $args;
+// }
+// add_filter( 'register_taxonomy_args', 'wpse301755_change_tags_labels', 10, 2 );
+
+
+
+
+
+function wpse_58799_remove_parent_category()
+{
+    if ( 'cuisine' != $_GET['taxonomy'] )
+        return;
+
+    $parent = 'parent()';
+
+    if ( isset( $_GET['action'] ) )
+        $parent = 'parent().parent()';
+
+    ?>
+        <script type="text/javascript">
+            jQuery(document).ready(function($)
+            {     
+                $('label[for=parent]').<?php echo $parent; ?>.remove();       
+            });
+        </script>
+    <?php
+}
+add_action( 'admin_head-edit-tags.php', 'wpse_58799_remove_parent_category' );
+
+
+// function blah($original_excerpt) { 
+//   if ( !is_search() ) return $original_excerpt; 
+//   return get_post_meta(get_the_ID(), 'MYCUSTOMFIELD', true); 
+// }
+
+// add_filter( 'the_excerpt', 'blah');
+
+add_filter("recipe_description_excerpt", function($excerpt, $prepare_excerpt, $permalink, $entry, $class) {
+	$excerpt = get_field( 'description', $entry->ID );
+   	return $excerpt; 
+}, 10, 5);
+
+
+function string_limit_words($string, $word_limit) {
+   $words = explode(' ', $string, ($word_limit + 1));
+	
+   if(count($words) > $word_limit) {
+      array_pop($words);
+   }
+	
+   return implode(' ', $words);
+}
+
+
+function modify_excerpt($excerpt) {
+   $label = "Read More";
+   $limit = 50;
+   $excerpt = string_limit_words( $excerpt, $limit) . '…';
+   $excerpt .= '<a href="" class="avia-button av-readmore avia-icon_select-no avia-size-small avia-position-center avia-color-theme-color"><span class="avia_iconbox_title">' . $label . '</span></a>';
+   return $excerpt;
+}
+
+
+// add_filter('get_the_excerpt', function($excerpt, $entry) {
+//    $custom_excerpt = get_field( 'description', $entry->ID );
+	
+//    if ( $custom_excerpt ) {
+//       $excerpt = modify_excerpt($custom_excerpt);
+//    }
+	
+//    return $excerpt; 
+// }, 10, 2);
+
+function remove_h1_from_tinymce_formats($init) {
+    // Only allow Paragraph, Heading 2, and Heading 3 (no Heading 1)
+    $init['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6';
+    return $init;
+}
+add_filter('tiny_mce_before_init', 'remove_h1_from_tinymce_formats');
+
+
+function is_editing_single_custom_type($type) {
+    if (is_admin() && isset($_GET['post'])) {
+        $post_id = intval($_GET['post']);
+        return get_post_type($post_id) === $type;
+    }
+    return false;
+}
+
+function custom_tinymce_formats_for_recipe($init) {
+    if (is_editing_single_custom_type('recipe')) {
+        // Only allow Paragraph, Heading 4, 5, 6 for recipes
+        $init['block_formats'] = 'Paragraph=p;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6';
+    }
+    return $init;
+}
+add_filter('tiny_mce_before_init', 'custom_tinymce_formats_for_recipe');
+
+
+function myplugin_remove_h1_for_ingredient_cpt() {
+    global $post_type;
+
+    // Only enqueue for the 'ingredient' custom post type
+    if ($post_type === 'ingredient') {
+        wp_enqueue_script(
+            'myplugin-gutenberg-heading-filter',
+            get_template_directory_uri() . '/js/gutenberg-heading-filter.js',
+            array('wp-blocks', 'wp-hooks', 'wp-element', 'wp-edit-post'),
+            false,
+            true
+        );
+    }
+}
+add_action('enqueue_block_editor_assets', 'myplugin_remove_h1_for_ingredient_cpt');

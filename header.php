@@ -19,15 +19,15 @@
   <header class="site-header">
 
     <?php if (is_front_page()) { ?>
-    <h1 class="site-title">
+    <div class="site-title">
       <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
-    </h1>
+    </div>
     <?php } else { ?>
-    <h1 class="site-title">
+    <div class="site-title">
       <a href="<?php echo esc_url(home_url('/')); ?>">
         <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
       </a>
-    </h1>
+    </div>
     <?php } ?>
 
     <div class="search">

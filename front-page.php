@@ -3,37 +3,47 @@
 ?>
 
 <main class="site-main">
-  <div class="recently-added recently-added-recipes">
-    <h3>RECIPES</h3>
-    <ul class="links-list">
     <?php
-    $recipes = new WP_Query(array(
-      'posts_per_page' => -1,
-      'post_type' => 'recipe'
-    ));
+      $recipes = new WP_Query(array(
+        'posts_per_page' => 5,
+        'post_type' => 'recipe'
+      ));
 
-    while($recipes->have_posts()) {
-      $recipes->the_post(); ?>
-      <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-    <?php } wp_reset_postdata(); ?>
-    </ul>
-  </div>
+      while($recipes->have_posts()) {
+        $recipes->the_post(); ?>
+        <section class="entry">
+        
+          <div class="entry-feature-img" style="background-image: url(<?php the_post_thumbnail_url('soultrust-featured') ?>);">
+          </div>
+   
 
-  <div class="recently-added recently-added-ingredients">
-    <h3>INGREDIENT PROFILES</h3>
-    <ul class="links-list">
-    <?php
-    $recipes = new WP_Query(array(
-      'posts_per_page' => -1,
-      'post_type' => 'ingredient'
-    ));
+        <div class="recipe-info">
+          <header>
 
-    while($recipes->have_posts()) {
-      $recipes->the_post(); ?>
-      <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-    <?php } wp_reset_postdata(); ?>
-    </ul>
-  </div>
+          <?php the_title('<h1 class="entry-title"><a href="'. esc_url(get_permalink()) . '">', '</a></h1>'); ?>
+            <a href="<?php the_permalink(); ?>" class="link-recipe">Go to Recipe</a>
+          </header>
+          <div class="description">
+            <?php if (strlen(get_field('description')) > 0) { ?>
+            <?php the_field('description'); ?>
+            <?php } ?>
+          </div>
+        </div>
+       
+          </section>  
+         
+         
+  
+        
+      <?php } ?>  
+       
+         
+
+
+
+      
+
+ 
 </main>
 
 <?php
