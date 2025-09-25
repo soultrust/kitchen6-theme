@@ -97,7 +97,7 @@ function k6_widgets_init() {
 			'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'twentytwentyone' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
-			'before_title'  => '<h3 class="widget-title">',
+			'before_title'  => '<h4 class="widget-title">',
 			'after_title'   => '</h2>',
 		)
 	);
@@ -364,3 +364,56 @@ function myplugin_remove_h1_for_ingredient_cpt() {
 }
 add_action('enqueue_block_editor_assets', 'myplugin_remove_h1_for_ingredient_cpt');
 
+
+
+// Widget for Latest Posts of a Custom Post Type
+
+class Latest_Recipe_Widget extends WP_Widget {
+    function __construct() {
+        parent::__construct(
+            'latest_recipe_widget',
+            __('Latest Recipes', 'text_domain'),
+            array('description' => __('Displays latest posts from the Recipe custom post type', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Latest Recipes', 'text_domain');
+        $query = new WP_Query(array(
+            'post_type' => 'recipe',
+            'posts_per_page' => 50,
+            'post_status' => 'publish'
+        ));
+
+        echo $args['before_widget'];
+        if (!empty($title)) echo $args['before_title'] . $title . $args['after_title'];
+
+        if ($query->have_posts()) {
+            echo '<ul class="link-list">';
+            while ($query->have_posts()) {
+                $query->the_post();
+                echo '<li class="link-list-item"><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>No recipes found.</p>';
+        }
+        echo $args['after_widget'];
+        wp_reset_postdata();
+    }
+
+    public function form($instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Latest Recipes', 'text_domain');
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
+            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+        </p>
+        <?php
+    }
+}
+
+function register_latest_recipe_widget() {
+    register_widget('Latest_Recipe_Widget');
+}
+add_action('widgets_init', 'register_latest_recipe_widget');

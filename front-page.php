@@ -18,9 +18,8 @@
    
 
         <div class="recipe-info">
-          <header>
-
-          <?php the_title('<h1 class="entry-title"><a href="'. esc_url(get_permalink()) . '">', '</a></h1>'); ?>
+          <header class="entry-header">
+          <?php the_title('<h2 class="entry-title"><a href="'. esc_url(get_permalink()) . '">', '</a></h2>'); ?>
             <a href="<?php the_permalink(); ?>" class="link-recipe">Go to Recipe</a>
           </header>
           <div class="description">

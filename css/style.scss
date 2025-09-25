@@ -36,7 +36,7 @@ a {
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-rows: auto 1fr;
   overflow-x: hidden;
   position: relative;
@@ -282,8 +282,9 @@ ul.links-list {
     border-radius: 8px;
     border: 2px solid;
   }
-  .entry-title {
-    font-size: 2.5rem;
+  .recipe-title {
+    font-size: 2rem;
+    margin-bottom: 0.7rem;
   }
   .recipe-meta {
     padding-left: 0.2rem;
@@ -340,7 +341,7 @@ ul.links-list {
 .recipe-layout {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-column-gap: 1rem;
+  grid-gap: 1rem;
   grid-template-rows: auto 1fr;
 }
 
@@ -535,11 +536,6 @@ p {
 }
 
 .home {
-  .layout {
-    display: grid;
-    grid-template-rows: 60px auto;
-    grid-template-columns: 2fr 1fr;
-  }
   .site-main {
     grid-column: 1/2;
     border-radius: 9px;
@@ -572,12 +568,19 @@ p {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
   }
   .link-recipe {
     text-decoration: none;
     font-size: 1rem;
     text-transform: uppercase;
     padding-top: 0.2rem;
+  }
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 }
 
@@ -605,6 +608,12 @@ p {
     text-align: left;
     padding: 1rem 1rem 1rem 0.1rem;
     background-color: transparent;
+  }
+  .widget-title {
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
   }
 }
 

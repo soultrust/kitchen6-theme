@@ -15,7 +15,7 @@ if (has_post_thumbnail()) { ?>
 </div>
 <?php } ?>
 <div class="recipe-info">
-  <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+  <?php the_title('<h1 class="recipe-title">', '</h1>'); ?>
   <div class="recipe-meta">
     <?php if (get_field('source')) { ?>
     Source: <?php if (get_field('source_url')) { ?>
