@@ -5,7 +5,7 @@
 <main class="site-main">
     <?php
       $recipes = new WP_Query(array(
-        'posts_per_page' => 5,
+        'posts_per_page' => 15,
         'post_type' => 'recipe'
       ));
 
@@ -20,7 +20,7 @@
         <div class="recipe-info">
           <header class="entry-header">
           <?php the_title('<h2 class="entry-title"><a href="'. esc_url(get_permalink()) . '">', '</a></h2>'); ?>
-            <a href="<?php the_permalink(); ?>" class="link-recipe">Go to Recipe</a>
+            <a href="<?php the_permalink(); ?>" class="link-recipe"><i class="dashicons dashicons-format-aside"></i>Recipe</a>
           </header>
           <div class="description">
             <?php if (strlen(get_field('description')) > 0) { ?>

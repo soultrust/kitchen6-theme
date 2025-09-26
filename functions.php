@@ -231,11 +231,28 @@ function register_taxonomy_cuisine() {
 		 'show_ui'           => true,
 		 'show_admin_column' => true,
 		 'query_var'         => true,
-		 'rewrite'           => [ 'slug' => 'course' ],
+		 'public'            => true,
+		 'rewrite'           => [ 'slug' => 'cuisine' ],
 	 );
 	 register_taxonomy( 'cuisine', [ 'recipe' ], $args );
 }
 add_action( 'init', 'register_taxonomy_cuisine' );
+
+// Flush rewrite rules when theme is activated
+function flush_rewrite_rules_on_activation() {
+	register_taxonomy_cuisine();
+	flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'flush_rewrite_rules_on_activation' );
+
+// Manual flush function - call this once to fix the 404 issue
+function manual_flush_rewrite_rules() {
+	if (isset($_GET['flush_rules']) && $_GET['flush_rules'] == 'true') {
+		flush_rewrite_rules();
+		echo '<div style="background: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border: 1px solid #c3e6cb;">Rewrite rules flushed successfully!</div>';
+	}
+}
+add_action( 'init', 'manual_flush_rewrite_rules' );
 
 
 

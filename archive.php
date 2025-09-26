@@ -2,7 +2,7 @@
   get_header();
 ?>
 <main id="primary" class="site-main">
-<h2 class="archive-title"><?php the_archive_title(); ?></h2>
+<h1 class="archive-title"><?php the_archive_title(); ?></h1>
 	<?php
 
 $tag_args = array(
@@ -17,15 +17,31 @@ $category_args = array(
 if (is_tag()) {
 	$recipes = new WP_Query($tag_args);
 }
-if (is_category()) {
+elseif (is_category()) {
 	$recipes = new WP_Query($category_args);
 }
+elseif (is_tax()) {
+	// Handle custom taxonomies
+	$current_term = get_queried_object();
+	$taxonomy_args = array(
+		'post_type' => 'recipe',
+		'tax_query' => array(
+			array(
+				'taxonomy' => $current_term->taxonomy,
+				'field'    => 'slug',
+				'terms'    => $current_term->slug,
+			),
+		),
+		'posts_per_page' => -1,
+	);
+	$recipes = new WP_Query($taxonomy_args);
+}
 ?>
-<ul class="links-list">
+<ul class="link-list">
 	<?php
 while ($recipes->have_posts()) {
 	$recipes->the_post(); ?>
-	<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+	<li class="link-list-item"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
 <?php 
 } ?></ul>
 </main>

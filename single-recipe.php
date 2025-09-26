@@ -25,7 +25,6 @@ if (has_post_thumbnail()) { ?>
                 the_field('source'); ?>
    <?php }
     }
-
         $show_categories = true;
         $categories = wp_get_post_categories(get_the_ID());
 
@@ -35,14 +34,16 @@ if (has_post_thumbnail()) { ?>
             $show_categories = false;
         endif;
 
-				$taxonomies = wp_list_filter(
-					get_object_taxonomies($post, 'objects'),
-					array(
-							'public' => true,
-					)
-			);
+			$all_taxonomies = get_object_taxonomies($post, 'objects');
+			$taxonomies = array();
 			
-			?>
+			// Filter for public taxonomies manually
+			foreach ($all_taxonomies as $taxonomy_name => $taxonomy_object) {
+				if ($taxonomy_object->public) {
+					$taxonomies[$taxonomy_name] = $taxonomy_object;
+				}
+			}
+?>
 			<div class="entry-taxonomies <?php echo has_category(null, get_the_ID()) && $show_categories ? '' : 'hide-categories'; ?>">
 			<?php
 			// Show terms for all taxonomies associated with the post.
@@ -64,6 +65,12 @@ if (has_post_thumbnail()) { ?>
 							$list             = get_the_tag_list('', esc_html($separator), '', $post->ID);
 							/* translators: %s: list of taxonomy terms */
 							$placeholder_text = __('Tags: %s', 'wp-rig');
+							break;
+					case 'cuisine':
+							$class            = 'cuisine-links term-links';
+							$list             = get_the_term_list($post->ID, 'cuisine', '', esc_html($separator), '');
+							/* translators: %s: list of taxonomy terms */
+							$placeholder_text = __('Cuisines: %s', 'wp-rig');
 							break;
 					default:
 							$class            = str_replace('_', '-', $taxonomy->name) . '-links term-links';
