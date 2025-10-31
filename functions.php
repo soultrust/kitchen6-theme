@@ -434,3 +434,127 @@ function register_latest_recipe_widget() {
     register_widget('Latest_Recipe_Widget');
 }
 add_action('widgets_init', 'register_latest_recipe_widget');
+
+
+
+
+class Ingredient_Widget extends WP_Widget {
+    function __construct() {
+        parent::__construct(
+            'ingredient_widget',
+            __('Ingredient List', 'text_domain'),
+            array('description' => __('Displays a list of Ingredients', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance) {
+        echo $args['before_widget'];
+        echo $args['before_title'] . apply_filters('widget_title', 'Ingredient Profiles') . $args['after_title'];
+
+        // Query custom post type 'ingredient'
+        $ingredient_query = new WP_Query(array(
+            'post_type' => 'ingredient',
+            'posts_per_page' => -1,
+            'orderby' => 'title',
+            'order' => 'ASC'
+        ));
+
+        if ($ingredient_query->have_posts()) {
+            echo '<ul class="ingredient-list">';
+            while ($ingredient_query->have_posts()) {
+                $ingredient_query->the_post();
+                // Each list item is a link to the single ingredient page
+                echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>No ingredients found.</p>';
+        }
+        wp_reset_postdata();
+
+        echo $args['after_widget'];
+    }
+
+    public function form($instance) {
+        // Optional: Add widget admin form fields here
+    }
+
+    public function update($new_instance, $old_instance) {
+        // Optional: Save widget options here
+        return $instance;
+    }
+}
+
+// Register the widget
+function register_ingredient_widget() {
+    register_widget('Ingredient_Widget');
+}
+add_action('widgets_init', 'register_ingredient_widget');
+
+
+
+
+
+class Recipe_List_Widget extends WP_Widget {
+    function __construct() {
+        parent::__construct(
+            'recipe_list_widget',
+            __('Recipe List', 'text_domain'),
+            array('description' => __('Displays a list of all recipes in alphabetical order.', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance) {
+        echo $args['before_widget'];
+        if (!empty($instance['title'])) {
+            echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
+        }
+
+        // Query all recipes
+        $recipes = new WP_Query(array(
+            'post_type'      => 'recipe',
+            'posts_per_page' => -1,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+            'post_status'    => 'publish',
+        ));
+
+        if ($recipes->have_posts()) {
+            echo '<ul class="recipe-list-widget">';
+            while ($recipes->have_posts()) {
+                $recipes->the_post();
+                echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+            }
+            echo '</ul>';
+            wp_reset_postdata();
+        } else {
+            echo '<p>No recipes found.</p>';
+        }
+
+        echo $args['after_widget'];
+    }
+
+    public function form($instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Recipes', 'text_domain');
+        ?>
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:'); ?></label>
+            <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text"
+                   value="<?php echo esc_attr($title); ?>">
+        </p>
+        <?php
+    }
+
+    public function update($new_instance, $old_instance) {
+        $instance = array();
+        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        return $instance;
+    }
+}
+
+// Register the widget
+function register_recipe_list_widget() {
+    register_widget('Recipe_List_Widget');
+}
+add_action('widgets_init', 'register_recipe_list_widget');
