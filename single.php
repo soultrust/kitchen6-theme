@@ -4,9 +4,16 @@
 <main id="primary" class="site-main">
 	<?php
 
+
+
+
 	while ( have_posts() ) {
 		the_post(); ?>
-		<h2 class="page-title">Ingredient Profile: <?php the_title(); ?></h2>
+		<h2 class="page-title"><?php 
+    $post_type_obj = get_post_type_object(get_post_type());
+echo $post_type_obj->labels->singular_name;
+
+?>: <?php the_title(); ?></h2>
     <p><?php the_content(); ?></p>
 		<?php }
     echo paginate_links(); ?>

@@ -55,6 +55,23 @@ function k6_post_types() {
     ),
     'menu_icon' => 'dashicons-media-document'
   ));
+
+  register_post_type('supplement', array(
+    'supports' => array('title', 'editor', 'thumbnail'),
+    'show_in_rest' => true,
+    'rewrite' => array('slug' => 'supplements'),
+    'has_archive' => true,
+    'menu_position' => 4,
+    'public' => true,
+    'labels' => array(
+      'name' => 'Supplements',
+      'all_items' => 'All Supplements',
+      'add_new_item' => 'Add Supplement',
+      'edit_item' => 'Edit Supplement',
+      'singular_name' => 'Supplement'
+    ),
+    'menu_icon' => 'dashicons-media-document'
+  ));
 }
 add_action('init', 'k6_post_types');
 
@@ -490,6 +507,60 @@ function register_ingredient_widget() {
     register_widget('Ingredient_Widget');
 }
 add_action('widgets_init', 'register_ingredient_widget');
+
+
+class Supplement_Widget extends WP_Widget {
+    function __construct() {
+        parent::__construct(
+            'supplement_widget',
+            __('Supplements', 'text_domain'),
+            array('description' => __('Displays a list of Supplements', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance) {
+        echo $args['before_widget'];
+        echo $args['before_title'] . apply_filters('widget_title', 'Supplements') . $args['after_title'];
+
+        // Query custom post type 'ingredient'
+        $supplement_query = new WP_Query(array(
+            'post_type' => 'supplement',
+            'posts_per_page' => -1,
+            'orderby' => 'title',
+            'order' => 'ASC'
+        ));
+
+        if ($supplement_query->have_posts()) {
+            echo '<ul class="ingredient-list">';
+            while ($supplement_query->have_posts()) {
+                $supplement_query->the_post();
+                // Each list item is a link to the single supplement page
+                echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>No supplements found.</p>';
+        }
+        wp_reset_postdata();
+
+        echo $args['after_widget'];
+    }
+
+    public function form($instance) {
+        // Optional: Add widget admin form fields here
+    }
+
+    public function update($new_instance, $old_instance) {
+        // Optional: Save widget options here
+        return $instance;
+    }
+}
+
+// Register the widget
+function register_supplement_widget() {
+    register_widget('Supplement_Widget');
+}
+add_action('widgets_init', 'register_supplement_widget');
 
 
 
