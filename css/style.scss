@@ -331,7 +331,7 @@ ul.link-list {
 .recipe-layout {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-gap: 1rem;
+  gap: 1rem;
   grid-template-rows: auto 1fr;
 }
 
@@ -507,7 +507,7 @@ p {
   background-position: center center;
   border-radius: 8px;
   width: 100%;
-  border: 2px solid;
+  border: 2px solid var(--red);
   min-height: 10.4rem;
   margin-bottom: 0.3rem;
 
@@ -603,7 +603,23 @@ p {
     text-transform: uppercase;
     font-size: 1.8rem;
     font-weight: 400;
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem;
+  }
+  .widget {
+    margin-bottom: 2rem;
+
+    ul {
+      list-style-type: disc;
+      margin-left: 1rem;
+
+      a {
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 

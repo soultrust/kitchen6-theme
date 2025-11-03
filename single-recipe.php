@@ -11,7 +11,7 @@
 
 
 if (has_post_thumbnail()) { ?>
-<div class="entry-feature-img" style="background-image: url(<?php the_post_thumbnail_url('newnormalize-featured') ?>);">
+<div class="entry-featured-img" style="background-image: url(<?php the_post_thumbnail_url('newnormalize-featured') ?>);">
 </div>
 <?php } ?>
 <div class="recipe-info">

@@ -13,7 +13,7 @@
         $recipes->the_post(); ?>
         <section class="entry">
         
-          <div class="entry-feature-img" style="background-image: url(<?php the_post_thumbnail_url('soultrust-featured') ?>);">
+          <div class="entry-featured-img" style="background-image: url(<?php the_post_thumbnail_url('soultrust-featured') ?>);">
           </div>
    
 
