@@ -399,60 +399,9 @@ function myplugin_remove_h1_for_ingredient_cpt() {
 add_action('enqueue_block_editor_assets', 'myplugin_remove_h1_for_ingredient_cpt');
 
 
-// Widget for Cuisines
-class Cuisines_Widget extends WP_Widget {
-    function __construct() {
-        parent::__construct(
-            'cuisines_widget',
-            __('Cuisines', 'soultrust'),
-            array('description' => __('Displays Cuisine custom post type', 'soultrust'))
-        );
-    }
 
-    public function widget($args, $instance) {
-        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'soultrust');
-        $query = new WP_Query(array(
-          'post_type' => 'cuisine',
-          'posts_per_page' => 50,
-          'post_status' => 'publish'
-        ));
+// Widget for Latest Posts of a Custom Post Type
 
-        echo $args['before_widget'];
-        if (!empty($title)) echo $args['before_title'] . $title . $args['after_title'];
-
-        if ($query->have_posts()) {
-            echo '<ul class="link-list">';
-            while ($query->have_posts()) {
-                $query->the_post();
-                echo '<li class="link-list-item"><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
-            }
-            echo '</ul>';
-        } else {
-            echo '<p>No cuisines found.</p>';
-        }
-        echo $args['after_widget'];
-        wp_reset_postdata();
-    }
-
-    public function form($instance) {
-        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'soultrust');
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>">
-        </p>
-        <?php
-    }
-}
-
-function register_latest_recipe_widget() {
-    register_widget('Cuisines_Widget');
-}
-add_action('widgets_init', 'register_cuisines_widget');
-
-
-
-// Widget for Latest Recipes
 class Latest_Recipe_Widget extends WP_Widget {
     function __construct() {
         parent::__construct(
@@ -504,7 +453,8 @@ function register_latest_recipe_widget() {
 add_action('widgets_init', 'register_latest_recipe_widget');
 
 
-// Widget for Ingredients
+
+
 class Ingredient_Widget extends WP_Widget {
     function __construct() {
         parent::__construct(
@@ -679,3 +629,95 @@ function register_recipe_list_widget() {
     register_widget('Recipe_List_Widget');
 }
 add_action('widgets_init', 'register_recipe_list_widget');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Cuisine_List_Widget extends WP_Widget {
+    public function __construct() {
+        parent::__construct(
+            'cuisine_list_widget',
+            __('Cuisine List', 'text_domain'),
+            array('description' => __('Displays a list of all cuisines', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance) {
+        echo $args['before_widget'];
+        if (!empty($instance['title'])) {
+            echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
+        }
+
+        $terms = get_terms(array(
+            'taxonomy' => 'cuisine',
+            'hide_empty' => false,
+        ));
+
+        if (!empty($terms) && !is_wp_error($terms)) {
+            echo '<ul class="cuisine-list">';
+            foreach ($terms as $term) {
+                $link = get_term_link($term);
+                if (!is_wp_error($link)) {
+                    echo '<li><a href="' . esc_url($link) . '">' . esc_html($term->name) . '</a></li>';
+                }
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>' . __('No cuisines found.', 'text_domain') . '</p>';
+        }
+
+        echo $args['after_widget'];
+    }
+
+    public function form($instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'text_domain');
+        ?>
+        <p>
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:', 'text_domain'); ?></label>
+            <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+        </p>
+        <?php
+    }
+
+    public function update($new_instance, $old_instance) {
+        $instance = array();
+        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        return $instance;
+    }
+}
+
+// Register the widget
+function register_cuisine_list_widget() {
+    register_widget('Cuisine_List_Widget');
+}
+add_action('widgets_init', 'register_cuisine_list_widget');
