@@ -399,9 +399,60 @@ function myplugin_remove_h1_for_ingredient_cpt() {
 add_action('enqueue_block_editor_assets', 'myplugin_remove_h1_for_ingredient_cpt');
 
 
+// Widget for Cuisines
+class Cuisines_Widget extends WP_Widget {
+    function __construct() {
+        parent::__construct(
+            'cuisines_widget',
+            __('Cuisines', 'soultrust'),
+            array('description' => __('Displays Cuisine custom post type', 'soultrust'))
+        );
+    }
 
-// Widget for Latest Posts of a Custom Post Type
+    public function widget($args, $instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'soultrust');
+        $query = new WP_Query(array(
+          'post_type' => 'cuisine',
+          'posts_per_page' => 50,
+          'post_status' => 'publish'
+        ));
 
+        echo $args['before_widget'];
+        if (!empty($title)) echo $args['before_title'] . $title . $args['after_title'];
+
+        if ($query->have_posts()) {
+            echo '<ul class="link-list">';
+            while ($query->have_posts()) {
+                $query->the_post();
+                echo '<li class="link-list-item"><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>No cuisines found.</p>';
+        }
+        echo $args['after_widget'];
+        wp_reset_postdata();
+    }
+
+    public function form($instance) {
+        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'soultrust');
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
+            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+        </p>
+        <?php
+    }
+}
+
+function register_latest_recipe_widget() {
+    register_widget('Cuisines_Widget');
+}
+add_action('widgets_init', 'register_cuisines_widget');
+
+
+
+// Widget for Latest Recipes
 class Latest_Recipe_Widget extends WP_Widget {
     function __construct() {
         parent::__construct(
@@ -453,8 +504,7 @@ function register_latest_recipe_widget() {
 add_action('widgets_init', 'register_latest_recipe_widget');
 
 
-
-
+// Widget for Ingredients
 class Ingredient_Widget extends WP_Widget {
     function __construct() {
         parent::__construct(
