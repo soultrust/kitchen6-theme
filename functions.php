@@ -115,7 +115,7 @@ function k6_widgets_init() {
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h4 class="widget-title">',
-			'after_title'   => '</h2>',
+			'after_title'   => '</h4>',
 		)
 	);
 }
@@ -721,3 +721,181 @@ function register_cuisine_list_widget() {
     register_widget('Cuisine_List_Widget');
 }
 add_action('widgets_init', 'register_cuisine_list_widget');
+
+
+/**
+ * Browse Accordion Widget
+ * Single accordion with Cuisines, Alphabetical Order, Ingredient Profiles, Supplements.
+ * Only one section open at a time. Expanded content fills available vertical space.
+ */
+class Browse_Accordion_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'browse_accordion_widget',
+			__('Browse Accordion', 'kitchen6'),
+			array('description' => __('Accordion menu: Cuisines, Alphabetical Order, Ingredient Profiles, Supplements.', 'kitchen6'))
+		);
+	}
+
+	public function widget($args, $instance) {
+		$default_open = !empty($instance['default_open']) ? $instance['default_open'] : 'none';
+
+		echo $args['before_widget'];
+		if (!empty($instance['title'])) {
+			echo $args['before_title'] . esc_html($instance['title']) . $args['after_title'];
+		}
+
+		?>
+		<div class="k6-accordion-widget-wrapper">
+		<div class="k6-browse-accordion" data-default-open="<?php echo esc_attr($default_open); ?>">
+			<div class="k6-accordion-section" data-section="cuisines">
+				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-cuisines">Cuisines</button>
+				<div id="k6-accordion-cuisines" class="k6-accordion-content" role="region" aria-labelledby="k6-accordion-cuisines-label">
+					<div class="k6-accordion-inner">
+						<?php $this->render_cuisines(); ?>
+					</div>
+				</div>
+			</div>
+			<div class="k6-accordion-section" data-section="alphabetical">
+				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-alphabetical">Alphabetical Order</button>
+				<div id="k6-accordion-alphabetical" class="k6-accordion-content" role="region">
+					<div class="k6-accordion-inner">
+						<?php $this->render_alphabetical(); ?>
+					</div>
+				</div>
+			</div>
+			<div class="k6-accordion-section" data-section="ingredients">
+				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-ingredients">Ingredient Profiles</button>
+				<div id="k6-accordion-ingredients" class="k6-accordion-content" role="region">
+					<div class="k6-accordion-inner">
+						<?php $this->render_ingredients(); ?>
+					</div>
+				</div>
+			</div>
+			<div class="k6-accordion-section" data-section="supplements">
+				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-supplements">Supplements</button>
+				<div id="k6-accordion-supplements" class="k6-accordion-content" role="region">
+					<div class="k6-accordion-inner">
+						<?php $this->render_supplements(); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<?php
+
+		echo $args['after_widget'];
+	}
+
+	private function render_cuisines() {
+		$terms = get_terms(array('taxonomy' => 'cuisine', 'hide_empty' => false));
+		if (!empty($terms) && !is_wp_error($terms)) {
+			echo '<ul class="k6-accordion-list cuisine-list">';
+			foreach ($terms as $term) {
+				$link = get_term_link($term);
+				if (!is_wp_error($link)) {
+					echo '<li><a href="' . esc_url($link) . '">' . esc_html($term->name) . '</a></li>';
+				}
+			}
+			echo '</ul>';
+		} else {
+			echo '<p>' . esc_html__('No cuisines found.', 'kitchen6') . '</p>';
+		}
+	}
+
+	private function render_alphabetical() {
+		$recipes = new WP_Query(array(
+			'post_type'      => 'recipe',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'post_status'    => 'publish',
+		));
+		if ($recipes->have_posts()) {
+			echo '<ul class="k6-accordion-list recipe-list">';
+			while ($recipes->have_posts()) {
+				$recipes->the_post();
+				echo '<li><a href="' . esc_url(get_permalink()) . '">' . esc_html(get_the_title()) . '</a></li>';
+			}
+			echo '</ul>';
+			wp_reset_postdata();
+		} else {
+			echo '<p>' . esc_html__('No recipes found.', 'kitchen6') . '</p>';
+		}
+	}
+
+	private function render_ingredients() {
+		$query = new WP_Query(array(
+			'post_type'      => 'ingredient',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		));
+		if ($query->have_posts()) {
+			echo '<ul class="k6-accordion-list ingredient-list">';
+			while ($query->have_posts()) {
+				$query->the_post();
+				echo '<li><a href="' . esc_url(get_permalink()) . '">' . esc_html(get_the_title()) . '</a></li>';
+			}
+			echo '</ul>';
+			wp_reset_postdata();
+		} else {
+			echo '<p>' . esc_html__('No ingredients found.', 'kitchen6') . '</p>';
+		}
+	}
+
+	private function render_supplements() {
+		$query = new WP_Query(array(
+			'post_type'      => 'supplement',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		));
+		if ($query->have_posts()) {
+			echo '<ul class="k6-accordion-list supplement-list">';
+			while ($query->have_posts()) {
+				$query->the_post();
+				echo '<li><a href="' . esc_url(get_permalink()) . '">' . esc_html(get_the_title()) . '</a></li>';
+			}
+			echo '</ul>';
+			wp_reset_postdata();
+		} else {
+			echo '<p>' . esc_html__('No supplements found.', 'kitchen6') . '</p>';
+		}
+	}
+
+	public function form($instance) {
+		$title        = !empty($instance['title']) ? $instance['title'] : __('Browse Recipes', 'kitchen6');
+		$default_open = !empty($instance['default_open']) ? $instance['default_open'] : 'none';
+		?>
+		<p>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'kitchen6'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+		</p>
+		<p>
+			<label for="<?php echo esc_attr($this->get_field_id('default_open')); ?>"><?php esc_html_e('Default open section:', 'kitchen6'); ?></label>
+			<select class="widefat" id="<?php echo esc_attr($this->get_field_id('default_open')); ?>" name="<?php echo esc_attr($this->get_field_name('default_open')); ?>">
+				<option value="none" <?php selected($default_open, 'none'); ?>><?php esc_html_e('None (all closed)', 'kitchen6'); ?></option>
+				<option value="cuisines" <?php selected($default_open, 'cuisines'); ?>>Cuisines</option>
+				<option value="alphabetical" <?php selected($default_open, 'alphabetical'); ?>>Alphabetical Order</option>
+				<option value="ingredients" <?php selected($default_open, 'ingredients'); ?>>Ingredient Profiles</option>
+				<option value="supplements" <?php selected($default_open, 'supplements'); ?>>Supplements</option>
+			</select>
+		</p>
+		<?php
+	}
+
+	public function update($new_instance, $old_instance) {
+		$instance = array();
+		$instance['title']        = (!empty($new_instance['title'])) ? sanitize_text_field($new_instance['title']) : '';
+		$instance['default_open'] = (!empty($new_instance['default_open']) && in_array($new_instance['default_open'], array('none', 'cuisines', 'alphabetical', 'ingredients', 'supplements'), true))
+			? $new_instance['default_open']
+			: 'none';
+		return $instance;
+	}
+}
+
+function register_browse_accordion_widget() {
+	register_widget('Browse_Accordion_Widget');
+}
+add_action('widgets_init', 'register_browse_accordion_widget');

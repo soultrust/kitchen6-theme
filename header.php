@@ -21,12 +21,12 @@
 
     <?php if (is_front_page()) { ?>
     <div class="site-title">
-      <?php echo file_get_contents(get_stylesheet_directory_uri() . '../images/kitchen6-logo.svg') ?>
+      <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
     </div>
     <?php } else { ?>
     <div class="site-title">
       <a href="<?php echo esc_url(home_url('/')); ?>">
-        <?php echo file_get_contents(get_stylesheet_directory_uri() . '../images/kitchen6-logo.svg') ?>
+        <?php echo file_get_contents(get_stylesheet_directory_uri() . '/images/kitchen6-logo.svg') ?>
       </a>
     </div>
     <?php } ?>
