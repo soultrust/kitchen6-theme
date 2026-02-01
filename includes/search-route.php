@@ -3,7 +3,8 @@
 function register_search() {
   register_rest_route('k6/v1', 'search', array(
     'methods' => WP_REST_SERVER::READABLE,
-    'callback' => 'search_results'
+    'callback' => 'search_results',
+    'permission_callback' => '__return_true', // Allows public access to the route
   ));
 }
 add_action('rest_api_init', 'register_search');
