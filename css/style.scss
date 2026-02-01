@@ -633,12 +633,17 @@ p {
     min-height: 0;
   }
 
-  .widget.browse_accordion_widget {
+  .widget:has(.k6-browse-accordion) {
     margin-bottom: 0;
   }
 }
 
 /* Browse accordion styles */
+/* Hide widget titles when individual widgets are inside the accordion - accordion triggers serve as labels */
+.k6-browse-accordion .widget-title {
+  display: none;
+}
+
 .k6-browse-accordion {
   display: flex;
   flex-direction: column;
@@ -695,11 +700,15 @@ p {
 .k6-accordion-content {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
-  padding: 0.5rem 0;
+  overflow: hidden;
+  padding: 0;
+  max-height: 0;
+  transition: max-height 0.3s ease;
 
-  &[hidden] {
-    display: none;
+  .k6-accordion-section.is-open & {
+    max-height: 2000px;
+    overflow-y: auto;
+    padding: 0.5rem 0.25rem 0.5rem 0;
   }
 }
 

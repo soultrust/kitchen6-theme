@@ -1,6 +1,7 @@
 /**
  * Browse Accordion - only one section open at a time.
  * Expanded content fills available vertical space and scrolls when overflow.
+ * Content slides down/up when opening/closing.
  */
 class Accordion {
   constructor() {
@@ -56,7 +57,7 @@ class Accordion {
 
     section.classList.add('is-open');
     trigger.setAttribute('aria-expanded', 'true');
-    content.hidden = false;
+    content.setAttribute('aria-hidden', 'false');
   }
 
   closeSection(section) {
@@ -66,7 +67,7 @@ class Accordion {
 
     section.classList.remove('is-open');
     trigger.setAttribute('aria-expanded', 'false');
-    content.hidden = true;
+    content.setAttribute('aria-hidden', 'true');
   }
 }
 

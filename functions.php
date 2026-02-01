@@ -465,8 +465,12 @@ class Ingredient_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
+        $show_title = !empty($instance['show_title']);
+
         echo $args['before_widget'];
-        echo $args['before_title'] . apply_filters('widget_title', 'Ingredient Profiles') . $args['after_title'];
+        if ($show_title) {
+            echo $args['before_title'] . apply_filters('widget_title', 'Ingredient Profiles') . $args['after_title'];
+        }
 
         // Query custom post type 'ingredient'
         $ingredient_query = new WP_Query(array(
@@ -493,11 +497,18 @@ class Ingredient_Widget extends WP_Widget {
     }
 
     public function form($instance) {
-        // Optional: Add widget admin form fields here
+        $show_title = !empty($instance['show_title']);
+        ?>
+        <p>
+            <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_title')); ?>" name="<?php echo esc_attr($this->get_field_name('show_title')); ?>" <?php checked($show_title); ?>>
+            <label for="<?php echo esc_attr($this->get_field_id('show_title')); ?>"><?php esc_html_e('Show title', 'kitchen6'); ?></label>
+        </p>
+        <?php
     }
 
     public function update($new_instance, $old_instance) {
-        // Optional: Save widget options here
+        $instance = array();
+        $instance['show_title'] = !empty($new_instance['show_title']);
         return $instance;
     }
 }
@@ -519,10 +530,14 @@ class Supplement_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
-        echo $args['before_widget'];
-        echo $args['before_title'] . apply_filters('widget_title', 'Supplements') . $args['after_title'];
+        $show_title = !empty($instance['show_title']);
 
-        // Query custom post type 'ingredient'
+        echo $args['before_widget'];
+        if ($show_title) {
+            echo $args['before_title'] . apply_filters('widget_title', 'Supplements') . $args['after_title'];
+        }
+
+        // Query custom post type 'supplement'
         $supplement_query = new WP_Query(array(
             'post_type' => 'supplement',
             'posts_per_page' => -1,
@@ -547,11 +562,18 @@ class Supplement_Widget extends WP_Widget {
     }
 
     public function form($instance) {
-        // Optional: Add widget admin form fields here
+        $show_title = !empty($instance['show_title']);
+        ?>
+        <p>
+            <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_title')); ?>" name="<?php echo esc_attr($this->get_field_name('show_title')); ?>" <?php checked($show_title); ?>>
+            <label for="<?php echo esc_attr($this->get_field_id('show_title')); ?>"><?php esc_html_e('Show title', 'kitchen6'); ?></label>
+        </p>
+        <?php
     }
 
     public function update($new_instance, $old_instance) {
-        // Optional: Save widget options here
+        $instance = array();
+        $instance['show_title'] = !empty($new_instance['show_title']);
         return $instance;
     }
 }
@@ -576,8 +598,10 @@ class Recipe_List_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
+        $show_title = !empty($instance['show_title']);
+
         echo $args['before_widget'];
-        if (!empty($instance['title'])) {
+        if ($show_title && !empty($instance['title'])) {
             echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
         }
 
@@ -606,7 +630,8 @@ class Recipe_List_Widget extends WP_Widget {
     }
 
     public function form($instance) {
-        $title = !empty($instance['title']) ? $instance['title'] : __('Recipes', 'text_domain');
+        $title      = !empty($instance['title']) ? $instance['title'] : __('Recipes', 'text_domain');
+        $show_title = !empty($instance['show_title']);
         ?>
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:'); ?></label>
@@ -614,12 +639,17 @@ class Recipe_List_Widget extends WP_Widget {
                    name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text"
                    value="<?php echo esc_attr($title); ?>">
         </p>
+        <p>
+            <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_title')); ?>" name="<?php echo esc_attr($this->get_field_name('show_title')); ?>" <?php checked($show_title); ?>>
+            <label for="<?php echo esc_attr($this->get_field_id('show_title')); ?>"><?php esc_html_e('Show title', 'kitchen6'); ?></label>
+        </p>
         <?php
     }
 
     public function update($new_instance, $old_instance) {
         $instance = array();
-        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['title']      = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['show_title'] = !empty($new_instance['show_title']);
         return $instance;
     }
 }
@@ -673,8 +703,10 @@ class Cuisine_List_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
+        $show_title = !empty($instance['show_title']);
+
         echo $args['before_widget'];
-        if (!empty($instance['title'])) {
+        if ($show_title && !empty($instance['title'])) {
             echo $args['before_title'] . apply_filters('widget_title', $instance['title']) . $args['after_title'];
         }
 
@@ -700,18 +732,24 @@ class Cuisine_List_Widget extends WP_Widget {
     }
 
     public function form($instance) {
-        $title = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'text_domain');
+        $title      = !empty($instance['title']) ? $instance['title'] : __('Cuisines', 'text_domain');
+        $show_title = !empty($instance['show_title']);
         ?>
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:', 'text_domain'); ?></label>
             <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+        </p>
+        <p>
+            <input class="checkbox" type="checkbox" id="<?php echo esc_attr($this->get_field_id('show_title')); ?>" name="<?php echo esc_attr($this->get_field_name('show_title')); ?>" <?php checked($show_title); ?>>
+            <label for="<?php echo esc_attr($this->get_field_id('show_title')); ?>"><?php esc_html_e('Show title', 'kitchen6'); ?></label>
         </p>
         <?php
     }
 
     public function update($new_instance, $old_instance) {
         $instance = array();
-        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['title']      = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['show_title'] = !empty($new_instance['show_title']);
         return $instance;
     }
 }
@@ -725,66 +763,94 @@ add_action('widgets_init', 'register_cuisine_list_widget');
 
 /**
  * Browse Accordion Widget
- * Single accordion with Cuisines, Alphabetical Order, Ingredient Profiles, Supplements.
- * Only one section open at a time. Expanded content fills available vertical space.
+ * Configurable accordion: Cuisines, Alphabetical Order, Ingredient Profiles, Supplements.
+ * Admin can choose which sections to show. Only one section open at a time.
  */
 class Browse_Accordion_Widget extends WP_Widget {
+
+	private static $sections = array(
+		'cuisines'     => 'Cuisines',
+		'alphabetical' => 'Alphabetical Order',
+		'ingredients'  => 'Ingredient Profiles',
+		'supplements'  => 'Supplements',
+	);
+
 	public function __construct() {
 		parent::__construct(
 			'browse_accordion_widget',
 			__('Browse Accordion', 'kitchen6'),
-			array('description' => __('Accordion menu: Cuisines, Alphabetical Order, Ingredient Profiles, Supplements.', 'kitchen6'))
+			array('description' => __('Configurable accordion: choose which sections to display.', 'kitchen6'))
 		);
 	}
 
 	public function widget($args, $instance) {
 		$default_open = !empty($instance['default_open']) ? $instance['default_open'] : 'none';
+		$enabled      = $this->get_enabled_sections($instance);
 
-		echo $args['before_widget'];
-		if (!empty($instance['title'])) {
-			echo $args['before_title'] . esc_html($instance['title']) . $args['after_title'];
+		if (empty($enabled)) {
+			return;
 		}
 
+		// If default_open is disabled, fall back to first enabled or none
+		if ($default_open !== 'none' && !in_array($default_open, $enabled, true)) {
+			$default_open = $enabled[0];
+		}
+
+		echo $args['before_widget'];
 		?>
 		<div class="k6-accordion-widget-wrapper">
 		<div class="k6-browse-accordion" data-default-open="<?php echo esc_attr($default_open); ?>">
-			<div class="k6-accordion-section" data-section="cuisines">
-				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-cuisines">Cuisines</button>
-				<div id="k6-accordion-cuisines" class="k6-accordion-content" role="region" aria-labelledby="k6-accordion-cuisines-label">
+		<?php
+		foreach (self::$sections as $section_id => $label) {
+			if (!in_array($section_id, $enabled, true)) {
+				continue;
+			}
+			$content_id = 'k6-accordion-' . $section_id;
+			?>
+			<div class="k6-accordion-section" data-section="<?php echo esc_attr($section_id); ?>">
+				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="<?php echo esc_attr($content_id); ?>"><?php echo esc_html($label); ?></button>
+				<div id="<?php echo esc_attr($content_id); ?>" class="k6-accordion-content" role="region">
 					<div class="k6-accordion-inner">
-						<?php $this->render_cuisines(); ?>
+						<?php $this->render_section($section_id); ?>
 					</div>
 				</div>
 			</div>
-			<div class="k6-accordion-section" data-section="alphabetical">
-				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-alphabetical">Alphabetical Order</button>
-				<div id="k6-accordion-alphabetical" class="k6-accordion-content" role="region">
-					<div class="k6-accordion-inner">
-						<?php $this->render_alphabetical(); ?>
-					</div>
-				</div>
-			</div>
-			<div class="k6-accordion-section" data-section="ingredients">
-				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-ingredients">Ingredient Profiles</button>
-				<div id="k6-accordion-ingredients" class="k6-accordion-content" role="region">
-					<div class="k6-accordion-inner">
-						<?php $this->render_ingredients(); ?>
-					</div>
-				</div>
-			</div>
-			<div class="k6-accordion-section" data-section="supplements">
-				<button type="button" class="k6-accordion-trigger" aria-expanded="false" aria-controls="k6-accordion-supplements">Supplements</button>
-				<div id="k6-accordion-supplements" class="k6-accordion-content" role="region">
-					<div class="k6-accordion-inner">
-						<?php $this->render_supplements(); ?>
-					</div>
-				</div>
-			</div>
+			<?php
+		}
+		?>
 		</div>
 		</div>
 		<?php
 
 		echo $args['after_widget'];
+	}
+
+	private function get_enabled_sections($instance) {
+		$enabled = array();
+		foreach (array_keys(self::$sections) as $section_id) {
+			$key = 'show_' . $section_id;
+			if (!isset($instance[$key]) || $instance[$key]) {
+				$enabled[] = $section_id;
+			}
+		}
+		return $enabled;
+	}
+
+	private function render_section($section_id) {
+		switch ($section_id) {
+			case 'cuisines':
+				$this->render_cuisines();
+				break;
+			case 'alphabetical':
+				$this->render_alphabetical();
+				break;
+			case 'ingredients':
+				$this->render_ingredients();
+				break;
+			case 'supplements':
+				$this->render_supplements();
+				break;
+		}
 	}
 
 	private function render_cuisines() {
@@ -872,14 +938,26 @@ class Browse_Accordion_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'kitchen6'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
 		</p>
+		<p><strong><?php esc_html_e('Show sections:', 'kitchen6'); ?></strong></p>
+		<p>
+			<?php foreach (self::$sections as $section_id => $label) : ?>
+				<?php
+				$key        = 'show_' . $section_id;
+				$is_checked = !isset($instance[$key]) || $instance[$key];
+				?>
+				<label style="display: block; margin-bottom: 0.35em;">
+					<input class="checkbox" type="checkbox" name="<?php echo esc_attr($this->get_field_name($key)); ?>" <?php checked($is_checked); ?>>
+					<?php echo esc_html($label); ?>
+				</label>
+			<?php endforeach; ?>
+		</p>
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('default_open')); ?>"><?php esc_html_e('Default open section:', 'kitchen6'); ?></label>
 			<select class="widefat" id="<?php echo esc_attr($this->get_field_id('default_open')); ?>" name="<?php echo esc_attr($this->get_field_name('default_open')); ?>">
 				<option value="none" <?php selected($default_open, 'none'); ?>><?php esc_html_e('None (all closed)', 'kitchen6'); ?></option>
-				<option value="cuisines" <?php selected($default_open, 'cuisines'); ?>>Cuisines</option>
-				<option value="alphabetical" <?php selected($default_open, 'alphabetical'); ?>>Alphabetical Order</option>
-				<option value="ingredients" <?php selected($default_open, 'ingredients'); ?>>Ingredient Profiles</option>
-				<option value="supplements" <?php selected($default_open, 'supplements'); ?>>Supplements</option>
+				<?php foreach (self::$sections as $section_id => $label) : ?>
+					<option value="<?php echo esc_attr($section_id); ?>" <?php selected($default_open, $section_id); ?>><?php echo esc_html($label); ?></option>
+				<?php endforeach; ?>
 			</select>
 		</p>
 		<?php
@@ -891,6 +969,10 @@ class Browse_Accordion_Widget extends WP_Widget {
 		$instance['default_open'] = (!empty($new_instance['default_open']) && in_array($new_instance['default_open'], array('none', 'cuisines', 'alphabetical', 'ingredients', 'supplements'), true))
 			? $new_instance['default_open']
 			: 'none';
+		foreach (array_keys(self::$sections) as $section_id) {
+			$key                  = 'show_' . $section_id;
+			$instance[$key]       = !empty($new_instance[$key]);
+		}
 		return $instance;
 	}
 }
